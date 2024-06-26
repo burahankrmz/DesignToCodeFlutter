@@ -7,5 +7,6 @@ final class AppRouterConstants {
 }
 
 final class AppProjectConstants {
-  static const String travelAppConstant = "Travel App";
+  static const String travelApp = "Travel App";
+  static const String smarHomeApp = "Smart Home App";
 }
