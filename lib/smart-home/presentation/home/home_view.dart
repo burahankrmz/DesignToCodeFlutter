@@ -1,84 +1,91 @@
 import 'package:daily_design_to_code/root/app/app_constants.dart';
-import 'package:daily_design_to_code/smart-home/app/smart_home_app_constants.dart';
+import 'package:daily_design_to_code/smart-home/app/smart_home_app_enums.dart';
 import 'package:daily_design_to_code/smart-home/app/smart_home_colors.dart';
-import 'package:daily_design_to_code/smart-home/presentation/home/widgets/air_controller.dart';
-import 'package:daily_design_to_code/smart-home/presentation/home/widgets/lamp_controller.dart';
+import 'package:daily_design_to_code/smart-home/presentation/home/widgets/home_body.dart';
+import 'package:daily_design_to_code/smart-home/presentation/search/widgets/search_body.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class SmartHomeAppHomeView extends StatelessWidget {
+class SmartHomeAppHomeView extends StatefulWidget {
   const SmartHomeAppHomeView({super.key});
 
+  @override
+  State<SmartHomeAppHomeView> createState() => _SmartHomeAppHomeViewState();
+}
+
+class _SmartHomeAppHomeViewState extends State<SmartHomeAppHomeView>
+    with _SmartHomeAppMixin {
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvoked: (invoked) {
-        Navigator.pushNamedAndRemoveUntil(context, AppRouterConstants.projectHomeRoute, (route) => false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRouterConstants.projectHomeRoute, (route) => false);
       },
       child: Scaffold(
         backgroundColor: SmartHomeColors.backGroundColor,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Positioned(top: 0, child: Image.asset(height: MediaQuery.sizeOf(context).height * 0.56, width: MediaQuery.sizeOf(context).width, SmartHomeAppAssetPaths.homeBackground, fit: BoxFit.fill),),
-            Positioned(
-              bottom: 0,
-              child: SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.46,
-                width: MediaQuery.sizeOf(context).width,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SmartHomeAppAirController(
-                                airName: "Humifier\nAir",
-                                airPercent: 36,
-                                isOpen: true,
-                                airIcon: Icons.water_drop,
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                            Expanded(
-                              child: SmartHomeAppAirController(
-                                airName: "Purifier\nAir",
-                                airPercent: 73,
-                                isOpen: true,
-                                airIcon: Icons.water,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      SmartHomeAppLampController()
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
+        body: ValueListenableBuilder<SmartHomeAppPages>(
+          valueListenable: pageNotifier,
+          builder: (context, SmartHomeAppPages currentPage, child) {
+            if (currentPage == SmartHomeAppPages.home) {
+              return const SmartHomeAppHomeBody();
+            }
+            if (currentPage == SmartHomeAppPages.search) {
+              return const SmartHomeAppSearchBody();
+            } else {
+              return const SizedBox();
+            }
+          },
         ),
         bottomNavigationBar: BottomAppBar(
           color: SmartHomeColors.backGroundColor,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10  ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(padding: EdgeInsets.zero, onPressed: (){}, icon: const Icon(Icons.home_outlined, color: SmartHomeColors.selectedIconColor)),
-                IconButton(padding: EdgeInsets.zero, onPressed: (){}, icon: const Icon(Icons.search, color: SmartHomeColors.unSelectedIconColor)),
-                IconButton(padding: EdgeInsets.zero, onPressed: (){}, icon: const Icon(Icons.apps_outlined, color: SmartHomeColors.unSelectedIconColor)),
-                IconButton(padding: EdgeInsets.zero, onPressed: (){}, icon: const Icon(Icons.person_2_outlined, color: SmartHomeColors.unSelectedIconColor)),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ValueListenableBuilder<SmartHomeAppPages>(
+                valueListenable: pageNotifier,
+                builder: (context, SmartHomeAppPages currentPage, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () => setPage(SmartHomeAppPages.home),
+                          icon: Icon(Icons.home_outlined,
+                              color: currentPage == SmartHomeAppPages.home
+                                  ? SmartHomeColors.selectedIconColor
+                                  : Colors.white)),
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () => setPage(SmartHomeAppPages.search),
+                          icon: Icon(Icons.search,
+                              color: currentPage == SmartHomeAppPages.search
+                                  ? SmartHomeColors.selectedIconColor
+                                  : Colors.white)),
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          icon: const Icon(Icons.apps_outlined,
+                              color: SmartHomeColors.unSelectedIconColor)),
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          icon: const Icon(Icons.person_2_outlined,
+                              color: SmartHomeColors.unSelectedIconColor)),
+                    ],
+                  );
+                }),
           ),
-        )
+        ),
       ),
     );
+  }
+}
+
+mixin _SmartHomeAppMixin on State<SmartHomeAppHomeView> {
+  final ValueNotifier<SmartHomeAppPages> pageNotifier =
+      ValueNotifier<SmartHomeAppPages>(SmartHomeAppPages.home);
+
+  setPage(SmartHomeAppPages page) {
+    pageNotifier.value = page;
   }
 }

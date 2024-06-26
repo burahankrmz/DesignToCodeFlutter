@@ -1,0 +1,4 @@
+enum SmartHomeAppPages {
+  home,
+  search
+}
