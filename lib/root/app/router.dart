@@ -8,7 +8,6 @@ import 'package:daily_design_to_code/travel-app/presentation/home/model/list_pop
 import 'package:daily_design_to_code/travel-app/presentation/landing/landing_view.dart';
 import 'package:daily_design_to_code/travel-app/presentation/product_detail/location_detail_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 final class AppRouter {
   const AppRouter._();

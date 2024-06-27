@@ -1,6 +1,5 @@
 import 'package:daily_design_to_code/smart-home/data/smart_home_app_device_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SmartHomeAppSearchBody extends StatelessWidget {

@@ -49,7 +49,7 @@ class SmartHomeAppAirController extends StatelessWidget {
                 Text(isOpen ? "On" : "False", style: GoogleFonts.manrope(fontWeight: FontWeight.w100, fontSize: 12, color: const Color(0xffF8F8F8))),
                 SizedBox(
                   height: 26,
-                  child: Switch(value: true, onChanged: (val) => {}, activeColor: Color(0xffFFB267)),
+                  child: Switch(value: true, onChanged: (val) => {}, activeColor: const Color(0xffFFB267)),
                 )
               ],
             )
